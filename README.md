@@ -1,31 +1,12 @@
-# BehaviorTree5(Latest update: May 5th, 2022)
+Disclaimer: The tree editor plugin made by tyridge77 is not compatible with this version of BehaviorTree.
 
-This module is a fork of BehaviorTrees2 by oniich_n. The following are the improvements/changes:
-* Previously, Decorators would only work when parented to Task node. Now, they can be placed arbitrarily, and even chained together, and will work as expected. Internally, decorators work slightly differently, but I preserved the clever and efficient tree traversal algorithm that oniich_n implemented in BehaviorTrees2. Should still be just as fast.
-* Calling tree:run() will return the outcome of the tree (success [1], fail [2], running [3])
-* Added repeater node
-    * can repeat infinitely with a "count" parameter of nil or <= 0
-    * returns success when done repeating
-    * returns fail if a "breakonfail" parameter is true and it receives a failed result from its child
-* Added tree node which will call another tree and return the result of the other tree
-* If a success/fail node is left hanging without a child, it will directly return success/fail
-* Improved ProcessNode organization and readability by adding the interateNodes() iterator and the addNode() function
-* Changed node runner from using string node states to using number enums, to avoid string comparisons. Should be slightly faster.
-* Changed tasks to report their status by returning a status number enum, instead of calling a success/fail/running function on self
-* Added some more assertions in ProcessNode
-* Added comments and documentation so it's a little easier to add new nodes
-* Changed "Task"/"Selector" language to more generic "Leaf"/"Composite"
+---
+# BehaviorTree
 
-V5: (May 2022)
-
-* Added Metaprox's External Task fork, to allow for rojo support
-* Fixed critical issue in behavior trees where multiple actors wouldn't properly keep track of their running states
-
-
-BehaviorTree5 is an implementation of the "behavior tree" paradigm for managing behavior. This allows us to create relatively complex patterns of behavior without much getting "lost in the sauce", so to speak. In *behavior trees*, actions are represented as **tasks**, or "leaves". These tasks are then collected in a container called a **tree**, which we "run" through in order to determine what task should be done at a given point in time.
+BehaviorTree is an implementation of the "behavior tree" paradigm for managing behavior. This allows us to create relatively complex patterns of behavior without much getting "lost in the sauce", so to speak. In *behavior trees*, actions are represented as **tasks**, or "leaves". These tasks are then collected in a container called a **tree**, which we "run" through in order to determine what task should be done at a given point in time.
 
 ## Nodes
-Nodes contain information about how to handle *something*. This can either be a task, or a manipulation of tasks. In BT2, there are 3 types of nodes:
+Nodes contain information about how to handle *something*. This can either be a task, or a manipulation of tasks. In BehaviorTree, there are 3 types of nodes:
 * Leafs
 * Composites
 * Decorators
@@ -33,7 +14,7 @@ Nodes contain information about how to handle *something*. This can either be a 
 Creating nodes creates new objects, so be aware of that when reusing them for different agents.
 
 ### Leafs
-Leafs are the foundation of BT3. They define how to act.
+Leafs are the foundation of BehaviorTree. They define how to act.
 
 #### Tasks
 The most commonly used leaf is a `Task`. Let's take a look at how they're written.
@@ -41,7 +22,7 @@ The most commonly used leaf is a `Task`. Let's take a look at how they're writte
 ```
 local SUCCESS,FAIL,RUNNING = 1,2,3
 
-local NewNode = BehaviorTree5.Task({
+local NewNode = BehaviorTree.Task({
 
    -- 'start' and 'finish' functions are optional. only "run" is required!
 
@@ -73,7 +54,7 @@ local NewNode = BehaviorTree5.Task({
    end
 })
 ```
-Tasks are created by calling `BehaviorTree5.Task()`, with a table defining different **task functions**. When we run a behavior tree, it will "process" a node in the order `start -> run -> finish`. These functions will *always be called in this order*.
+Tasks are created by calling `BehaviorTree.Task()`, with a table defining different **task functions**. When we run a behavior tree, it will "process" a node in the order `start -> run -> finish`. These functions will *always be called in this order*.
 
 The `start` and `finish` functions are usually used to prep and cleanup the work that a task does, like initializing and destroying object properties. However, it is not necessary to define them. A task will function perfectly fine with just the `run` function alone.
 
@@ -91,17 +72,17 @@ You can achieve the same effect with tasks, but it's a bit faster if you only ne
 The `Tree` is a special `Leaf` type that will execute another tree and pass the result of that tree to its parent.
 
 ```
-local AnotherTree = BehaviorTree5:new(...)
-local NewNode = BehaviorTree5.Task({tree = AnotherTree})
+local AnotherTree = BehaviorTree:new(...)
+local NewNode = BehaviorTree.Task({tree = AnotherTree})
 ````
 ### Composites
-These nodes take multiple `Leafs` and give them order. In BT3, we have `Sequence`, `Selector`, `Random` types for `Compites`.
+These nodes take multiple `Leafs` and give them order. In BehaviorTree, we have `Sequence`, `Selector`, `Random` types for `Compites`.
 
 #### Sequence
 The `Sequence` process the nodes it is given in sequence of the order they are defined. If any of its subnodes fail, then it will not continue to process the `subnodes` that follow it and return a `fail` state itself.
 
 ```
-Sequence = BehaviorTree5.Sequence({
+Sequence = BehaviorTree.Sequence({
     nodes = {
         node1,
         node2, -- if this failed, the next step would process node1
@@ -113,7 +94,7 @@ Sequence = BehaviorTree5.Sequence({
 The `Selector` node will process every node until one of them succeeds, after which it will return `success` itself. If none of its subnodes succeed, then this `Composite` would return a `fail` state.
 
 ```
-Priority = BehaviorTree5.Selector({
+Priority = BehaviorTree.Selector({
     nodes = {
         node1,
         node2,
@@ -124,7 +105,7 @@ Priority = BehaviorTree5.Selector({
 #### Random
 This `Selector` will randomly select a subnode to process, and will return whatever state that node returns.
 ```
-Random = BehaviorTree5.Random({
+Random = BehaviorTree.Random({
     nodes = {
         node1,
         node2,
@@ -137,7 +118,7 @@ Nodes can also have an optional `weight` attribute that will affect `Random`. De
 ```
 local SUCCESS,FAIL,RUNNING = 1,2,3
 
-node1 = BehaviorTree5.Task({
+node1 = BehaviorTree.Task({
     weight = 10,
     run = function(object)
         print("Weight: 10")
@@ -145,7 +126,7 @@ node1 = BehaviorTree5.Task({
     end
 })
 
-node2 = BehaviorTree5.Task({
+node2 = BehaviorTree.Task({
     weight = 10,
     run = function(object)
         print("Also weight: 10")
@@ -153,7 +134,7 @@ node2 = BehaviorTree5.Task({
     end
 })
 
-node3 = BehaviorTree5.Task({
+node3 = BehaviorTree.Task({
     weight = 200,
     run = function(object)
         print('You probably won't see "Weight: 10" printed'.)
@@ -165,7 +146,7 @@ node3 = BehaviorTree5.Task({
 The `While` Only accepts two children, a condition(1st child), and an action(2nd child) It repeats until either the condition returns fail, wherein the node itself returns fail, or the action returns success, wherein the node itself returns success.
 
 ```
-While = BehaviorTree5.While({
+While = BehaviorTree.While({
     nodes = {
         condition, -- If this node returns fail, return fail
         action -- When this node returns success, return success
@@ -177,29 +158,29 @@ Decorators are nodes that wrap other nodes and alter their task state. Right now
 
 These can be written as such.
 ```
-Invert = BehaviorTree5.Invert({
+Invert = BehaviorTree.Invert({
     nodes = {nodeHere}
 })
 ````
 `Repeat` decorators will repeat their children node tasks until `count`, or indefinitely if `count` is nil or < 0, after which they will return a `success` state. If `breakonfail` is true and its child node fails, it will stop repeating and return a `fail` state.
 ````
-Repeat = BehaviorTree5.Repeat({
+Repeat = BehaviorTree.Repeat({
     nodes = {nodeHere},
     count = 3,
     breakonfail = true
 })
 ````
 ## The Tree
-Once you have your nodes set up and ready to go, we can start planting some trees. A `Tree` usually starts with any `Selector`, which should have `Task` nodes in them or other `Selector` nodes with other nodes in them. They can be instantiated by calling `BehaviorTree5:new()` with a `table` containing tree information as its only argument.
+Once you have your nodes set up and ready to go, we can start planting some trees. A `Tree` usually starts with any `Selector`, which should have `Task` nodes in them or other `Selector` nodes with other nodes in them. They can be instantiated by calling `BehaviorTree:new()` with a `table` containing tree information as its only argument.
 
 ```
-Tree = BehaviorTree5:new({
-    tree = BehaviorTree5.Sequence({
+Tree = BehaviorTree:new({
+    tree = BehaviorTree.Sequence({
         nodes = {
             node1,
             node2,
 
-            BehaviorTree5.Random({
+            BehaviorTree.Random({
                 nodes = {
                     node3,
                     node4
@@ -217,8 +198,8 @@ To run a tree, call `:run` on the tree object, passing it a table. This table is
 ```
 local actorObject = {...}
 
-Tree = BehaviorTree5:new({
-    tree = BehaviorTree5.Sequence({
+Tree = BehaviorTree:new({
+    tree = BehaviorTree.Sequence({
         -- nodes from earlier
     })
 })
@@ -229,5 +210,10 @@ while true do
 end
 ```
 
-That's pretty much all there is to BehaviorTree5. Go nuts with it or something. If you have any issues or questions, feel free to ask about them on the devforum post: 
-https://devforum.roblox.com/t/btreesv5-rojo-support-fixes/
+---
+
+## Contributors
+
+- Originally by iniich_n and tyridge77: https://devforum.roblox.com/t/behaviortree2-create-complex-behaviors-with-ease/451047
+- Forked and improved by Defaultio: https://github.com/Defaultio/BehaviorTree3
+- Published as BehaviorTree to Wally & NPM by Scyfren
