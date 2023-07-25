@@ -20,7 +20,7 @@ local CollectionService = game:GetService("CollectionService")
 local TREE_TAG = "_BTree"
 
 local TreeCreator = {}
-local BehaviorTree3 = require(script.BehaviorTree)
+local BehaviorTree = require(script.BehaviorTree)
 
 local Trees = {}
 local SourceTasks = {}
@@ -44,7 +44,7 @@ end
 
 function TreeCreator:RegisterSharedBlackboard(index,tab)
 	assert(index and tab and typeof(index) == "string" and typeof(tab) == "table","RegisterSharedBlackboard takes two arguments in the form of [string] index,[table] table")
-	BehaviorTree3.SharedBlackboards[index] = tab
+	BehaviorTree.SharedBlackboards[index] = tab
 end
 
 
@@ -144,8 +144,8 @@ function TreeCreator:_buildNode(folder)
 		parameters.tree = tree
 	end
 
-	-- Initialize node with BehaviorTree3
-	local node = BehaviorTree3[nodeType](parameters)
+	-- Initialize node with BehaviorTree
+	local node = BehaviorTree[nodeType](parameters)
 	node.weight=weight
 
 	return node
@@ -161,7 +161,7 @@ function TreeCreator:_createTree(treeFolder)
 
 	local firstNodeFolder = RootFolder.Outputs:GetChildren()[1].Value
 	local root = self:_buildNode(firstNodeFolder)
-	local Tree = BehaviorTree3:new({tree=root,treeFolder = treeFolder})
+	local Tree = BehaviorTree:new({tree=root,treeFolder = treeFolder})
 	Trees[treeFolder] = Tree
 	TreeIDs[treeFolder.Name] = Tree
 	return Tree	
