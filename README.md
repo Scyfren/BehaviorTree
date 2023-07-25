@@ -1,4 +1,4 @@
-Disclaimer: The tree editor plugin made by tyridge77 is not compatible with this version of BehaviorTree.
+Disclaimer: This version of BehaviorTree has not been tested to work with the BehaviorTree Editor plugin made by tyridge77.
 
 ---
 # BehaviorTree

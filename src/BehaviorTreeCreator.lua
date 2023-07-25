@@ -1,20 +1,6 @@
 --[[
-    BEHAVIOR TREE CREATOR V5
-	
-	Originally by tyridge77: https://devforum.roblox.com/t/btrees-visual-editor-v2-0/461015
-	Forked and improved by defaultio
-
-	
-	Changes by tyridge77(November 23rd, 2020)
-	- Trees are now created only once, and decoupled from objects
-	- You now create trees simply by doing BehaviorTreeCreator:Create(treeFolder) - if a tree is already made for that folder it'll return that
-	- You now run Trees via Tree:Run(object) 
-	- You can now abort a tree via Tree:Abort(object) , used for switching between trees but still calling finish on the previously running task
-	- Added support for live debugging
-	- Added BehaviorTreeCreator:RegisterBlackboard(name,table)
-		- This is used in conjunction with the new blackboard query node
-	- Changed up some various internal stuff
---]]
+	Used by the BehaviorTree Editor plugin
+]]
 
 local CollectionService = game:GetService("CollectionService")
 local TREE_TAG = "_BTree"
