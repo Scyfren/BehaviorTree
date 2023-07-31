@@ -1,0 +1,14 @@
+{
+    "name": "BehaviorTree Test",
+    "tree": {
+        "$className": "DataModel",
+        "ReplicatedStorage": {
+            "Packages": {
+                "$className": "Folder",
+                "BehaviorTree": {
+                    "$path": "src"
+                }
+            }
+        }
+    }
+}
