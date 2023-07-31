@@ -10,7 +10,7 @@ export type TREE_OUTCOME = typeof SUCCESS | typeof FAIL | typeof RUNNING;
 /**
  * Type definition for Behavior Trees. The run method returns undefined when
  */
-export interface BehaviorTree3<O extends object> {
+export interface BehaviorTree<O extends object> {
 	/** Nodes that compose the behavore tree */
 	nodes: Node<O>[];
 	/** The index of the node currently being processed */
@@ -66,7 +66,7 @@ export interface BlackboardNodeParams<O extends object, B extends string> extend
 }
 
 export interface TreeNodeParams<O extends object> extends NodeParams {
-	tree: BehaviorTree3<O>;
+	tree: BehaviorTree<O>;
 }
 
 export interface SucceedNodeParams<O extends object> extends NodeParams {
@@ -111,10 +111,9 @@ export interface BehaviorTreeParams<O extends object> {
 	tree: Node<O>;
 }
 
-/** Constructor and static methods found on the exported BehaviorTree3 module. */
-interface BehaviorTree3Constructor {
-	readonly ClassName: "BehaviorTree3";
-	new <O extends object>(params: BehaviorTreeParams<O>): BehaviorTree3<O>;
+/** Constructor and static methods found on the exported BehaviorTree module. */
+interface BehaviorTreeConstructor {
+	new <O extends object>(params: BehaviorTreeParams<O>): BehaviorTree<O>;
 
 	Sequence: <O extends object>(params: SequenceNodeParams<O>) => Node<O, "sequence", typeof params>;
 	Selector: <O extends object>(params: SelectorNodeParams<O>) => Node<O, "selector", typeof params>;
@@ -134,20 +133,4 @@ interface BehaviorTree3Constructor {
 	["External Task"]: <O extends object>(params: TaskNodeParams<O>) => Node<O, "task", typeof params>;
 }
 
-/** Static methods found on the exported BehaviorTree3Creator object*/
-interface BehaviorTreeCreatorConstructor {
-	readonly ClassName: "BehaviorTree3Creator";
-
-	/** Create a behavior tree from a folder from the behavior tree plugin and an object. */
-	Create<O extends object>(treeFolder: Folder): BehaviorTree3<O> | undefined;
-
-	/** Create a shared blackboard with an index and blackboard object. */
-	RegisterSharedBlackboard(index: string, tab: object): void;
-
-	/** Used to set an identifier for a tree. */
-	SetTreeID(treeId: string, treeFolder: Folder): void;
-}
-
-// Actual Module exports
-export const BehaviorTree3: BehaviorTree3Constructor;
-export const BehaviorTreeCreator: BehaviorTreeCreatorConstructor;
+export const BehaviorTree: BehaviorTreeConstructor;
