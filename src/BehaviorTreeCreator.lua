@@ -131,8 +131,8 @@ function TreeCreator:_buildNode(folder)
 	end
 
 	-- Initialize node with BehaviorTree
+	parameters.weight = weight
 	local node = BehaviorTree[nodeType](parameters)
-	node.weight=weight
 
 	return node
 end
