@@ -6,7 +6,7 @@ local CollectionService = game:GetService("CollectionService")
 local TREE_TAG = "_BTree"
 
 local TreeCreator = {}
-local BehaviorTree = require(script.BehaviorTree)
+local BehaviorTree = require(script.Parent.BehaviorTree)
 
 local Trees = {}
 local SourceTasks = {}
