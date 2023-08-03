@@ -4,3 +4,4 @@ version = "0.1.0"
 registry = "https://github.com/UpliftGames/wally-index"
 license = "GPL-3.0-only"
 realm = "shared"
+exclude = ["node_modules", "out"]
