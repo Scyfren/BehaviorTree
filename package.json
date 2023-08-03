@@ -35,8 +35,5 @@
     },
     "files": [
         "src"
-    ],
-    "dependencies": {
-        "@rbxts/behavior-tree": "file:rbxts-behavior-tree-0.1.0.tgz"
-    }
+    ]
 }
