@@ -26,5 +26,4 @@
 		"tsBuildInfoFile": "out/tsconfig.tsbuildinfo",
 		"declaration": true,
 	},
-	"exclude": ["src/examples.ts"]
 }
