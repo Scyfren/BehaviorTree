@@ -4,4 +4,3 @@
 *.tsbuildinfo
 .vscode/
 *.tgz
-src/examples.ts
