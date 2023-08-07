@@ -147,7 +147,7 @@ function TreeCreator:_createTree(treeFolder)
 
 	local firstNodeFolder = RootFolder.Outputs:GetChildren()[1].Value
 	local root = self:_buildNode(firstNodeFolder)
-	local Tree = BehaviorTree:new({tree=root,treeFolder = treeFolder})
+	local Tree = BehaviorTree.new({tree=root,treeFolder = treeFolder})
 	Trees[treeFolder] = Tree
 	TreeIDs[treeFolder.Name] = Tree
 	return Tree	

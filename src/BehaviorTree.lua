@@ -494,7 +494,7 @@ function TreeProto:run(obj,...)
 		local node = nodes[data.index]
 
 		-- Debug
-		if IsStudio then
+        if IsStudio and self.folder then
 			DebugEntityNode.Value = node.nodefolder
 		end		
 		--
@@ -641,7 +641,7 @@ TreeProto.Abort = TreeProto.abort
 
 ------- TREE CONSTRUCTOR -------
 
-function BehaviorTree:new(params)
+function BehaviorTree.new(params)
 	local tree = params.tree
 	local nodes = {}
 	local DataLookup = {}

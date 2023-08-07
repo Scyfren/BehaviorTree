@@ -72,7 +72,7 @@ You can achieve the same effect with tasks, but it's a bit faster if you only ne
 The `Tree` is a special `Leaf` type that will execute another tree and pass the result of that tree to its parent.
 
 ```
-local AnotherTree = BehaviorTree:new(...)
+local AnotherTree = BehaviorTree.new(...)
 local NewNode = BehaviorTree.Task({tree = AnotherTree})
 ````
 ### Composites
@@ -171,10 +171,10 @@ Repeat = BehaviorTree.Repeat({
 })
 ````
 ## The Tree
-Once you have your nodes set up and ready to go, we can start planting some trees. A `Tree` usually starts with any `Selector`, which should have `Task` nodes in them or other `Selector` nodes with other nodes in them. They can be instantiated by calling `BehaviorTree:new()` with a `table` containing tree information as its only argument.
+Once you have your nodes set up and ready to go, we can start planting some trees. A `Tree` usually starts with any `Selector`, which should have `Task` nodes in them or other `Selector` nodes with other nodes in them. They can be instantiated by calling `BehaviorTree.new()` with a `table` containing tree information as its only argument.
 
 ```
-Tree = BehaviorTree:new({
+Tree = BehaviorTree.new({
     tree = BehaviorTree.Sequence({
         nodes = {
             node1,
@@ -198,7 +198,7 @@ To run a tree, call `:run` on the tree object, passing it a table. This table is
 ```
 local actorObject = {...}
 
-Tree = BehaviorTree:new({
+Tree = BehaviorTree.new({
     tree = BehaviorTree.Sequence({
         -- nodes from earlier
     })
