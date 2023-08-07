@@ -4,4 +4,4 @@ version = "0.1.1"
 registry = "https://github.com/UpliftGames/wally-index"
 license = "GPL-3.0-only"
 realm = "shared"
-exclude = ["node_modules", "out"]
+exclude = ["node_modules", "out", "package.json", "package-lock.json", "tsconfig.json", "*.ts"]
